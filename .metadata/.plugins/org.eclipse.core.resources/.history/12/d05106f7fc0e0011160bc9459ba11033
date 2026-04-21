@@ -1,0 +1,5 @@
+package com.worktrack.security;
+
+public class SecurityConfig {
+
+}

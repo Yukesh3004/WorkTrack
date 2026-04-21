@@ -1,0 +1,54 @@
+package com.worktrack.auth.service;
+
+import org.springframework.stereotype.Service;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.worktrack.auth.dto.LoginRequest;
+import com.worktrack.auth.dto.RegisterRequest;
+import com.worktrack.auth.entity.User;
+import com.worktrack.auth.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class AuthService {
+	
+	private final UserRepository userRepository;
+	private final PasswordEncoder passwordEncoder;
+	
+	public String register(RegisterRequest request) {
+		if(userRepository.existsByEmail(request.getEmail())) {
+			throw new RuntimeException("Email already exists");
+		}
+		
+		User user = User.builder()
+				.name(request.getName())
+				.email(request.getEmail())
+				.password(passwordEncoder.encode(request.getPassword()))
+				.role("USER")
+				.build();
+		
+		userRepository.save(user);
+		
+		return "User registered successfully";
+	}
+	
+	public String login(LoginRequest request) {
+		User user = userRepository.findByEmail(request.getEmail())
+				.orElseThrow(() -> new RuntimeException("User not found."));
+		
+		boolean isMatch = passwordEncoder.matches(
+				request.getEmail(),
+				user.getPassword()
+		);
+		
+		if(!isMatch) {
+			throw new RuntimeException("Invalid password");
+		}
+		
+		return "Login Sucessful";
+	}
+
+}

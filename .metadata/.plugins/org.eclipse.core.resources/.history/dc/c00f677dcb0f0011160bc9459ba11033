@@ -1,0 +1,5 @@
+package com.worktrack.common.handler;
+
+public class GlobalExceptionHandler {
+
+}

@@ -1,0 +1,5 @@
+package com.worktrack.auth.config;
+
+public class AppConfig {
+
+}
