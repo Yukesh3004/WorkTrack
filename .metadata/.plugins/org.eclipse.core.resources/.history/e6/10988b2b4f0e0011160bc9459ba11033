@@ -1,5 +1,0 @@
-package com.worktrack.auth.dto;
-
-public class RegisterRequest {
-
-}
